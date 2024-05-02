@@ -1,1 +1,3 @@
-https://vmpa-istbsc-001.fhlbsf-i.com
+<svg xmlns="http://www.w3.org/2000/svg" width="2" height="16" viewBox="0 0 2 16" fill="none">
+  <path d="M1 0V16" stroke="#0C36AA"/>
+</svg>
