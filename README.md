@@ -1,5 +1,3 @@
-¡Claro que sí! Prepararse para una entrevista técnica de React es crucial. Aquí tienes una serie de posibles preguntas con sus respectivas respuestas, organizadas por temas para que te sea más fácil estudiar:
-
 **Fundamentos de React**
 
 1.  ¿Qué es React?
