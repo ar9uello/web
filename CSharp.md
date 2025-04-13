@@ -14,8 +14,8 @@
 
 5.   ¿Cuáles son las diferencias entre tipos de valor y tipos de referencia en C#?
     
-**Tipos de valor:** Almacenan directamente su valor en la memoria (en la pila). Las asignaciones crean una copia independiente del valor. Ejemplos: `int`, `float`, `bool`, `struct`, `enum`.
-**Tipos de referencia:** Almacenan una referencia (dirección de memoria) al objeto real que se encuentra en el heap. Las asignaciones copian la referencia, por lo que ambas variables apuntan al mismo objeto. Ejemplos: `class`, `string`, `interface`, `delegate`, `array`.
+    **Tipos de valor:** Almacenan directamente su valor en la memoria (en la pila). Las asignaciones crean una copia independiente del valor. Ejemplos: `int`, `float`, `bool`, `struct`, `enum`.
+    **Tipos de referencia:** Almacenan una referencia (dirección de memoria) al objeto real que se encuentra en el heap. Las asignaciones copian la referencia, por lo que ambas variables apuntan al mismo objeto. Ejemplos: `class`, `string`, `interface`, `delegate`, `array`.
 
 6.   ¿Qué es el boxing y el unboxing en C#?
     
