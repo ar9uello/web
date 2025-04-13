@@ -21,48 +21,6 @@
     * **Componentes de Clase:** Son clases de JavaScript que extienden `React.Component` y deben implementar un método `render()` que devuelve elementos de React. Tenían características como estado local (`this.state`) y métodos de ciclo de vida antes de la llegada de los Hooks.
 
     Con la introducción de los Hooks, los componentes funcionales pueden acceder a las mismas funcionalidades que antes solo estaban disponibles en los componentes de clase (como estado y ciclo de vida). Por lo tanto, los componentes funcionales con Hooks son la forma predominante de escribir componentes en React moderno.
-
-4.1 En React, **un "hook"** (o gancho en español) es una **función especial que te permite “engancharte” a las características de React**, como el estado (`state`), el ciclo de vida (`lifecycle`) y el contexto, **sin necesidad de escribir una clase**.
-
-### 🧠 ¿Por qué existen los hooks?
-Antes de React 16.8, si querías usar estado o ciclos de vida, tenías que usar componentes de clase. Los hooks trajeron esa funcionalidad a los componentes funcionales, haciendo el código más limpio y reutilizable.
-
----
-
-### 🧩 Ejemplos comunes de hooks
-
-| Hook            | ¿Qué hace? |
-|------------------|------------|
-| `useState`       | Agrega estado local a un componente funcional. |
-| `useEffect`      | Ejecuta código cuando el componente se monta, actualiza o desmonta. |
-| `useContext`     | Permite usar valores del contexto (como un global state). |
-| `useRef`         | Mantiene una referencia mutable entre renders. |
-| `useMemo`        | Memoriza valores calculados para evitar cálculos innecesarios. |
-| `useCallback`    | Memoriza funciones para evitar recrearlas en cada render. |
-
----
-
-### ✅ Ejemplo simple con `useState`
-
-```jsx
-import { useState } from 'react';
-
-function Contador() {
-  const [contador, setContador] = useState(0);
-
-  return (
-    <div>
-      <p>Contador: {contador}</p>
-      <button onClick={() => setContador(contador + 1)}>
-        Incrementar
-      </button>
-    </div>
-  );
-}
-```
-
----
-
 **Componentes y Props**
 
 5.  ¿Qué son las `props` en React?
