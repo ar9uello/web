@@ -63,8 +63,6 @@ function Contador() {
 
 ---
 
-Si querés te puedo mostrar cómo usar más hooks o crear uno personalizado. ¿Estás trabajando en algo específico con React?
-
 **Componentes y Props**
 
 5.  ¿Qué son las `props` en React?
