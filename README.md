@@ -1,686 +1,447 @@
 
 ---
 
-## 🟢 Básico
+### 🚀 **Fundamentos de Node.js**
 
-### 1. **¿Qué es TypeScript y en qué se diferencia de JavaScript?**
+**1. ¿Qué es Node.js y para qué se utiliza?**  
   
-TypeScript es un superset de JavaScript que añade tipado estático y otras características orientadas a objetos. La principal diferencia es que TypeScript permite definir tipos (como `string`, `number`, `boolean`, etc.) y verifica errores en tiempo de compilación, lo que mejora la mantenibilidad del código.
+Node.js es un entorno de ejecución para JavaScript basado en el motor V8 de Chrome. Permite ejecutar código JavaScript del lado del servidor, lo que lo hace ideal para construir aplicaciones web escalables y de alto rendimiento, como APIs REST, servidores web, y más.
 
 ---
 
-### 2. **¿Qué ventajas tiene usar TypeScript?**
-
-- Tipado estático
-- Mejor autocompletado y refactorización
-- Mayor facilidad para detectar errores antes de ejecutar el código
-- Integración con editores (como VSCode)
-- Facilita el trabajo en equipos grandes y proyectos complejos
-
----
-
-### 3. **¿Cómo se define una interfaz en TypeScript?**
-```ts
-interface User {
-  id: number;
-  name: string;
-  email?: string; // opcional
-}
-```
-
----
-
-### 4. **¿Qué son los tipos literales en TypeScript?**
+**2. ¿Qué es el event loop en Node.js?**  
   
-Permiten restringir una variable a un conjunto específico de valores:
-```ts
-type Direction = 'left' | 'right' | 'up' | 'down';
-let move: Direction = 'left';
-```
+Es un mecanismo que permite a Node.js realizar operaciones no bloqueantes (como I/O) delegando operaciones pesadas a otros hilos o al sistema, y procesando callbacks cuando las tareas se completan. Gracias al event loop, Node.js puede manejar múltiples operaciones concurrentes de forma eficiente con un solo hilo.
 
 ---
 
-## 🟡 Intermedio
-
-### 5. **¿Cuál es la diferencia entre `interface` y `type`?**
-
-- Ambos pueden describir la forma de un objeto.
-- `interface` es extendible con `extends`, y se puede reabrir para agregar nuevas propiedades.
-- `type` puede ser más flexible: permite usar uniones, intersecciones y tipos primitivos.
-```ts
-type A = { a: number };
-type B = A & { b: string }; // Intersección
-```
-
----
-
-### 6. **¿Qué es el type inference?**
+**3. ¿Node.js es de un solo hilo?**  
   
-Es cuando TypeScript **infiera el tipo de una variable automáticamente** sin que el desarrollador lo especifique:
-```ts
-let age = 30; // TypeScript infiere que `age` es un number
-```
+Sí, el hilo principal que ejecuta JavaScript es único, pero Node.js usa un **thread pool** (a través de libuv) para operaciones I/O intensivas o que requieren múltiples hilos, como operaciones de archivos o criptografía.
 
 ---
 
-### 7. **¿Qué son los "Generics"?**
+### 📦 **Módulos y Dependencias**
+
+**4. ¿Cuál es la diferencia entre `require` y `import`?**  
   
-Son una forma de escribir funciones o clases que funcionan con múltiples tipos sin perder el tipo.
-```ts
-function identity<T>(value: T): T {
-  return value;
-}
-const result = identity<string>('Hola');
-```
+- `require` es parte del sistema de módulos CommonJS (por defecto en Node.js hasta versiones recientes).
+- `import` es parte de los módulos ES6 (ESM).  
+  Para usar `import`, necesitas configurar `"type": "module"` en tu `package.json` o usar la extensión `.mjs`.
 
 ---
 
-### 8. **¿Qué significa `readonly` y cómo se usa?**
-```ts
-interface User {
-  readonly id: number;
-  name: string;
-}
-```
+**5. ¿Qué es `package.json` y para qué sirve?**  
   
-La propiedad `id` no puede ser modificada una vez asignada. Útil para garantizar la inmutabilidad.
+Es un archivo de configuración que contiene información sobre el proyecto, scripts de ejecución, dependencias, versiones, autor, etc. Es fundamental para la gestión de paquetes en proyectos Node.js.
 
 ---
 
-### 9. **¿Qué es el tipo `unknown`?**
+### 🔧 **Asincronía**
+
+**6. ¿Qué diferencia hay entre callbacks, promesas y async/await?**  
+
+- **Callbacks**: funciones pasadas como argumento que se ejecutan después de una operación.
+- **Promesas**: objetos que representan una operación que puede completarse o fallar.
+- **async/await**: sintaxis más clara sobre promesas, que permite escribir código asincrónico como si fuera síncrono.
+
+---
+
+**7. ¿Cómo manejar errores en código async/await?**  
   
-Es un tipo más seguro que `any`, porque obliga a hacer una verificación antes de usar el valor.
-```ts
-function handle(val: unknown) {
-  if (typeof val === 'string') {
-    console.log(val.toUpperCase());
+Usando bloques `try/catch`. Ejemplo:
+```js
+async function fetchData() {
+  try {
+    const data = await getData();
+    console.log(data);
+  } catch (err) {
+    console.error('Error:', err.message);
   }
 }
 ```
 
 ---
 
-## 🔴 Avanzado
+### 🌐 **HTTP y APIs**
 
-### 10. **¿Qué son los "Utility Types"?**
+**8. ¿Cómo crear un servidor HTTP en Node.js sin frameworks?**  
 
-Son tipos integrados que transforman otros tipos. Ejemplos:
-- `Partial<T>`: Hace que todas las propiedades de `T` sean opcionales.
-- `Pick<T, K>`: Extrae un subconjunto de propiedades.
-- `Record<K, T>`: Crea un objeto con claves `K` y valores del tipo `T`.
+```js
+const http = require('http');
 
-```ts
-type User = { id: number; name: string };
-type UserPreview = Pick<User, 'id'>;
-```
+const server = http.createServer((req, res) => {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hola Mundo');
+});
 
----
-
-### 11. **¿Cómo usar `keyof` y `typeof`?**
-```ts
-type User = { id: number; name: string };
-type UserKeys = keyof User; // 'id' | 'name'
-```
-```ts
-const user = { name: 'Ana', age: 30 };
-type UserType = typeof user; // { name: string; age: number }
-```
-
----
-
-### 12. **¿Qué son los tipos condicionales?**
-```ts
-type IsString<T> = T extends string ? true : false;
-```
-  
-Permiten crear tipos que dependen de condiciones evaluadas en tiempo de compilación.
-
----
-
-### 13. **¿Cuál es la diferencia entre `any`, `unknown`, `never` y `void`?**
-| Tipo     | Descripción                                                                 |
-|----------|------------------------------------------------------------------------------|
-| `any`    | Puede ser cualquier cosa. Desactiva el chequeo de tipos.                   |
-| `unknown`| Puede ser cualquier cosa, pero exige validación antes de usarse.           |
-| `void`   | Para funciones que no retornan nada.                                        |
-| `never`  | Para funciones que nunca retornan (errores o loops infinitos).              |
-
----
-
-### 14. **¿Qué es un `Mapped Type`?**
-```ts
-type Optional<T> = {
-  [P in keyof T]?: T[P];
-};
-```
-  
-Permite recorrer propiedades de un tipo y modificarlas de forma dinámica.
-
----
-
-### 15. **¿Qué es el strict mode en TypeScript?**
-  
-Activa un conjunto de reglas más estrictas para mejorar la seguridad del código. Incluye:
-- `strictNullChecks`
-- `noImplicitAny`
-- `strictBindCallApply`
-- `strictFunctionTypes`
-
-Se activa con `"strict": true` en `tsconfig.json`.
-
----
-
-## 🟡 Intermedio – Avanzado (continuación)
-
----
-
-### 16. **¿Qué es el `as const` en TypeScript? ¿Para qué se usa?**
-
-
-`as const` convierte una estructura en una **tupla inmutable** y fija sus tipos como literales.
-
-```ts
-const roles = ['admin', 'user'] as const;
-// roles: readonly ['admin', 'user']
-// typeof roles[0] es 'admin', no string
-
-type Role = typeof roles[number]; // 'admin' | 'user'
-```
-
----
-
-### 17. **¿Cómo se crean tipos a partir de arrays o constantes?**
-
-
-Puedes usar `typeof` junto con `as const` para crear un union type.
-
-```ts
-const statuses = ['pending', 'approved', 'rejected'] as const;
-type Status = typeof statuses[number]; // 'pending' | 'approved' | 'rejected'
-```
-
----
-
-### 18. **¿Cómo prevenir `undefined` o `null` en propiedades opcionales?**
-
-
-Puedes usar el operador de coalescencia nula `??` o una verificación:
-
-```ts
-interface User {
-  name?: string;
-}
-
-const greet = (user: User) => {
-  console.log(`Hola, ${user.name ?? 'anónimo'}`);
-};
-```
-
----
-
-### 19. **¿Cómo definir un tipo para una función que recibe otra función como parámetro?**
-
-
-```ts
-function handleClick(callback: (event: MouseEvent) => void): void {
-  document.addEventListener('click', callback);
-}
-```
-
-También puedes definirlo como un tipo:
-
-```ts
-type Callback = (e: MouseEvent) => void;
-```
-
----
-
-### 20. **¿Qué es una "intersection type" y cómo se usa?**
-
-
-Une dos tipos en uno solo que debe cumplir con ambas estructuras.
-
-```ts
-type Person = { name: string };
-type Employee = { company: string };
-
-type Staff = Person & Employee;
-
-const worker: Staff = {
-  name: 'Robert',
-  company: 'OpenAI',
-};
-```
-
----
-
-### 21. **¿Cuál es la diferencia entre una clase y una interfaz en TypeScript?**
-
-
-- **Clases** generan código JavaScript en tiempo de compilación y se pueden instanciar.
-- **Interfaces** solo existen en tiempo de compilación para verificación de tipos.
-
----
-
-### 22. **¿Cómo extiendes tipos con `extends` en interfaces y en generics?**
-
-**Interfaces:**
-```ts
-interface A {
-  a: number;
-}
-interface B extends A {
-  b: string;
-}
-```
-
-**Generics:**
-```ts
-function logLength<T extends { length: number }>(input: T): void {
-  console.log(input.length);
-}
-```
-
----
-
-### 23. **¿Qué son los tipos discriminados?**
-
-
-Sirven para definir una unión de tipos con una propiedad común que actúa como "discriminador":
-
-```ts
-type Shape =
-  | { kind: 'circle'; radius: number }
-  | { kind: 'square'; side: number };
-
-function getArea(shape: Shape): number {
-  switch (shape.kind) {
-    case 'circle':
-      return Math.PI * shape.radius ** 2;
-    case 'square':
-      return shape.side ** 2;
-  }
-}
-```
-
----
-
-### 24. **¿Cómo escribes un tipo que representa un objeto con claves dinámicas?**
-
-
-```ts
-type Dictionary<T> = {
-  [key: string]: T;
-};
-
-const errorMessages: Dictionary<string> = {
-  required: 'Este campo es obligatorio',
-  email: 'El correo no es válido',
-};
-```
-
----
-
-### 25. **¿Qué es un `Type Guard`?**
-
-
-Una función o expresión que **refina** el tipo en tiempo de ejecución:
-
-```ts
-function isString(value: unknown): value is string {
-  return typeof value === 'string';
-}
-
-function process(input: unknown) {
-  if (isString(input)) {
-    console.log(input.toUpperCase());
-  }
-}
-```
-
----
-
-### 26. **¿Cómo usar `Exclude`, `Extract`, `NonNullable`, etc.?**
-
-```ts
-type T1 = Exclude<'a' | 'b' | 'c', 'a'>;        // 'b' | 'c'
-type T2 = Extract<'a' | 'b' | 'c', 'a' | 'b'>;  // 'a' | 'b'
-type T3 = NonNullable<string | null | undefined>; // string
-```
-
----
-
-### 27. **¿Qué es el `infer` keyword en tipos condicionales?**
-
-
-Permite **extraer un tipo** dentro de un tipo condicional.
-
-```ts
-type ReturnType<T> = T extends (...args: any[]) => infer R ? R : never;
-
-type Fn = () => number;
-type Result = ReturnType<Fn>; // number
-```
-
----
-
-### 28. **¿Puedes tipar un `fetch` con datos esperados?**
-
-
-```ts
-interface User {
-  id: number;
-  name: string;
-}
-
-async function getUser(): Promise<User> {
-  const res = await fetch('/api/user');
-  return res.json();
-}
-```
-
----
-
-### 29. **¿Qué pasa si asignas un tipo más amplio a uno más estrecho?**
-
-
-TypeScript lanza error:
-
-```ts
-let str: 'hola' = 'hola';
-let saludo: string = str; // ✅
-str = saludo; // ❌ error: string no es igual a 'hola'
-```
-
----
-
-### 30. **¿Qué es la estrategia de “Structural Typing”?**
-
-
-TypeScript **no compara por nombre**, sino por **forma**. Dos tipos son compatibles si tienen la misma estructura.
-
-```ts
-interface A { x: number }
-interface B { x: number }
-
-const a: A = { x: 10 };
-const b: B = a; // ✅ son compatibles
-```
-
----
-
-## 🔴 Avanzado (Parte 2)
-
----
-
-### 31. **¿Qué diferencia hay entre `interface` y `abstract class`?**
-
-
-- Una `interface` **solo define la forma** de un objeto, sin implementación.
-- Una `abstract class` **puede definir métodos con y sin implementación**, y puede tener propiedades protegidas, públicas o privadas.
-
-```ts
-interface Animal {
-  makeSound(): void;
-}
-
-abstract class Creature {
-  abstract makeSound(): void;
-
-  move(): void {
-    console.log('Moving...');
-  }
-}
-```
-
----
-
-### 32. **¿Qué es el `satisfies` operator? (TS 4.9+)**
-
-
-Valida que un objeto **cumple con un tipo** sin limitar su inferencia.
-
-```ts
-const user = {
-  id: 1,
-  name: 'Robert',
-  email: 'test@example.com',
-} satisfies { id: number; name: string };
-```
-
-Esto permite que `user` tenga más propiedades (como `email`), pero garantiza que cumple con el tipo requerido.
-
----
-
-### 33. **¿Cómo evitar repetir tipos en múltiples funciones?**
-
-
-Usando **tipos reutilizables** con `type` o `interface`.
-
-```ts
-type ApiResponse<T> = {
-  status: number;
-  data: T;
-};
-
-function getUser(): ApiResponse<User> { ... }
-function getPost(): ApiResponse<Post> { ... }
-```
-
----
-
-### 34. **¿Cómo tipar un middleware o interceptor genérico?**
-
-
-Con `Generics` que extiendan una interfaz base.
-
-```ts
-function useMiddleware<T extends Request>(req: T): T {
-  // hacer algo con req
-  return req;
-}
-```
-
----
-
-### 35. **¿Cómo se usa el operador `in` en tipos?**
-
-
-Para crear tipos dinámicos en `Mapped Types`.
-
-```ts
-type Flags = {
-  [K in 'featureA' | 'featureB']: boolean;
-};
-```
-
----
-
-### 36. **¿Cómo usar `template literal types` en TypeScript?**
-
-
-Permiten crear nuevos tipos basados en literales:
-
-```ts
-type Lang = 'en' | 'es';
-type Key = `title_${Lang}`; // 'title_en' | 'title_es'
-```
-
----
-
-### 37. **¿Qué es un “tuple” en TypeScript y en qué se diferencia de un array?**
-
-
-Una **tupla tiene longitud fija y tipos específicos en cada posición**, mientras que un array es homogéneo.
-
-```ts
-const tuple: [number, string] = [1, 'uno'];
-const arr: string[] = ['a', 'b', 'c'];
-```
-
----
-
-### 38. **¿Cómo representar un tipo para una función que puede retornar `T` o `Promise<T>`?**
-
-
-```ts
-type MaybePromise<T> = T | Promise<T>;
-```
-
----
-
-### 39. **¿Qué es el `this` contextual typing?**
-
-
-Es cuando TypeScript infiere el tipo de `this` dentro de una función basada en el contexto.
-
-```ts
-const obj = {
-  name: 'Robert',
-  greet(this: { name: string }) {
-    return `Hola, ${this.name}`;
-  }
-};
-```
-
----
-
-### 40. **¿Qué es el tipo `Awaited<T>`? (TS 4.5+)**
-
-
-Obtiene el tipo de valor **resuelto** de un `Promise`.
-
-```ts
-type Result = Awaited<Promise<string>>; // string
-```
-
----
-
-### 41. **¿Qué tipos usarías para representar un API de GraphQL tipada?**
-
-
-```ts
-type QueryResponse<T> = {
-  data: T;
-  errors?: { message: string }[];
-};
-
-type GetUserResult = QueryResponse<{ user: User }>;
-```
-
----
-
-### 42. **¿Cómo tipar un evento personalizado en el DOM?**
-
-
-```ts
-const event = new CustomEvent<'user-logged', { id: string }>('user-logged', {
-  detail: { id: '123' },
+server.listen(3000, () => {
+  console.log('Servidor en puerto 3000');
 });
 ```
 
 ---
 
-### 43. **¿Cómo implementar el patrón de "Command" con tipos seguros?**
+**9. ¿Qué es Express y por qué se usa tanto?**  
+  
+Es un framework minimalista para Node.js que simplifica la creación de APIs y servidores web. Facilita el manejo de rutas, middleware, y respuestas HTTP.
 
+---
 
-```ts
-interface Command<TInput, TOutput> {
-  execute(input: TInput): TOutput;
-}
+**10. ¿Qué son middlewares en Express?**  
+  
+Son funciones que tienen acceso al objeto `request`, `response` y a la función `next()`. Se usan para realizar tareas como autenticación, logging, parseo de body, etc.
 
-class CreateUser implements Command<{ name: string }, User> {
-  execute(input) {
-    return { id: 1, name: input.name };
+---
+
+### 🛡️ **Seguridad y Buenas Prácticas**
+
+**11. ¿Cómo proteger una API en Node.js?**  
+
+- Autenticación (JWT, OAuth)
+- Validación de entrada (usando Joi, zod, etc.)
+- Rate limiting
+- CORS controlado
+- Uso de HTTPS
+- Helmet para seguridad de cabeceras HTTP
+
+---
+
+### 🧪 **Testing y Debugging**
+
+**12. ¿Qué herramientas se usan para testear en Node.js?**  
+
+- Mocha / Jest: frameworks de testing
+- Chai: assertions
+- Supertest: para testear endpoints HTTP
+
+---
+
+### ⚙️ **Desempeño y Escalabilidad**
+
+**13. ¿Cómo escalar una aplicación Node.js?**  
+
+- Usar `cluster` o PM2 para balanceo de carga en múltiples procesos
+- Usar cache (ej. Redis)
+- Optimizar consultas a DB
+- Monitoreo (con herramientas como NewRelic, Datadog, etc.)
+
+---
+
+**14. ¿Qué es el archivo `.env` y cómo se usa en Node.js?**  
+
+Es un archivo donde se guardan variables de entorno. Con el paquete `dotenv`, puedes cargar estas variables en `process.env`:
+```js
+require('dotenv').config();
+console.log(process.env.PORT);
+```
+
+---
+
+### 🧱 **Arquitectura y Estructura de Proyectos**
+
+**15. ¿Cómo organizarías un proyecto grande de Node.js?**  
+
+- **Separación de responsabilidades**: por capas (controllers, services, repositories).
+- **Uso de módulos**: cada funcionalidad puede ser un módulo.
+- **Patrones**: como MVC, Clean Architecture o Hexagonal.
+- **Middlewares reutilizables**, **validaciones centralizadas**, **configuración por entorno**, y **tests por módulo**.
+
+---
+
+**16. ¿Qué es un archivo `controller`, `service`, y `repository`?**
+
+- **Controller**: maneja las peticiones HTTP y delega la lógica.
+- **Service**: contiene la lógica del negocio.
+- **Repository**: maneja el acceso a la base de datos o fuentes externas.
+
+---
+
+### 📄 **Manejo de Archivos y Streams**
+
+**17. ¿Cómo leer y escribir archivos en Node.js?**  
+
+Usando el módulo `fs`:
+```js
+const fs = require('fs');
+
+// Lectura
+fs.readFile('archivo.txt', 'utf8', (err, data) => {
+  if (err) throw err;
+  console.log(data);
+});
+
+// Escritura
+fs.writeFile('nuevo.txt', 'Contenido', (err) => {
+  if (err) throw err;
+});
+```
+
+---
+
+**18. ¿Qué es un stream en Node.js y por qué es útil?**  
+
+Es una abstracción de una fuente de datos que puede ser leída o escrita de manera secuencial. Se usa para manejar datos grandes sin cargarlos todos en memoria, como archivos grandes, video/audio o datos de red.
+
+Ejemplo:
+```js
+const fs = require('fs');
+const readStream = fs.createReadStream('archivo.txt');
+readStream.pipe(process.stdout);
+```
+
+---
+
+### 🧠 **Memoria y Rendimiento**
+
+**19. ¿Cómo detectar y solucionar un memory leak en Node.js?**  
+
+- Usar herramientas como **Chrome DevTools**, **clinic.js**, **heap snapshots**, o `--inspect`.
+- Buscar referencias que no se liberan (ej: caches mal manejadas, listeners no removidos).
+- Monitorear el uso de memoria con `process.memoryUsage()`.
+
+---
+
+### 🔐 **Autenticación y Seguridad**
+
+**20. ¿Cómo funciona JWT (JSON Web Token)?**  
+
+JWT es un token firmado que contiene información (payload) codificada. Sirve para autenticación sin estado (stateless).  
+Proceso:
+1. El usuario se autentica → el servidor genera un JWT.
+2. El cliente lo guarda y lo envía en cada petición (header `Authorization: Bearer`).
+3. El servidor valida la firma del JWT para autenticar.
+
+---
+
+**21. ¿Cómo proteger rutas en Express con JWT?**  
+
+```js
+const jwt = require('jsonwebtoken');
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization?.split(' ')[1];
+  if (!token) return res.status(401).send('Token requerido');
+  
+  try {
+    req.user = jwt.verify(token, process.env.JWT_SECRET);
+    next();
+  } catch (err) {
+    res.status(403).send('Token inválido');
   }
 }
 ```
 
 ---
 
-### 44. **¿Cómo usas `const enum` y cuáles son sus riesgos?**
+### 🔍 **Logs y Monitoreo**
 
+**22. ¿Cómo manejar logs en una aplicación Node.js?**  
 
-```ts
-const enum Direction {
-  Up,
-  Down,
-}
-
-let dir = Direction.Up;
-```
-
-Se reemplaza en tiempo de compilación, lo que **reduce el tamaño del bundle** pero **puede romper compatibilidad con bundlers como Webpack si no está configurado correctamente**.
+- Usar `console.log` en desarrollo.
+- En producción, usar librerías como **Winston**, **Pino** o **Morgan** (para logging HTTP).
+- Enviar logs a servicios como ELK Stack, Datadog, Loggly o CloudWatch.
 
 ---
 
-### 45. **¿Cuál es la diferencia entre `Object` y `Record<string, any>`?**
+### ⚡ **Frameworks y Librerías Comunes**
 
+**23. ¿Qué ventajas tiene NestJS sobre Express?**  
 
-- `Object` es un tipo muy amplio que acepta funciones, arrays, etc.
-- `Record<K, T>` representa **objetos planos** con claves específicas.
-
-```ts
-const data: Record<string, number> = { apples: 5, oranges: 10 };
-```
-
----
-
-### 46. **¿Cómo forzar que un objeto tenga al menos una propiedad entre varias?**
-
-
-```ts
-type AtLeastOne<T> = {
-  [K in keyof T]: Pick<T, K>;
-}[keyof T];
-
-type Settings = AtLeastOne<{ darkMode: boolean; autoSave: boolean }>;
-```
+- Arquitectura basada en módulos.
+- Decoradores y TypeScript por defecto.
+- Inyección de dependencias incorporada.
+- Escalable y mantenible.
+- Más cercano a frameworks como Angular.
 
 ---
 
-### 47. **¿Cómo puedes extraer solo los métodos de un tipo?**
+**24. ¿Qué diferencia hay entre `npm` y `yarn`?**  
 
+Ambos son gestores de paquetes, pero:
+- `yarn` fue creado para mejorar el rendimiento de `npm`.
+- Ambos soportan `package-lock.json` / `yarn.lock`.
+- Yarn tiende a ser más rápido en instalaciones paralelas.
+- Hoy en día, las diferencias son mínimas (npm ha mejorado mucho).
 
-```ts
-type Methods<T> = {
-  [K in keyof T]: T[K] extends (...args: any) => any ? K : never;
-}[keyof T];
+---
+
+**25. ¿Cómo manejar variables de entorno en Node.js?**  
+
+1. Crear un archivo `.env`:
+```
+PORT=3000
+DB_URL=mongodb://localhost:27017/test
+```
+
+2. Usar `dotenv`:
+```js
+require('dotenv').config();
+console.log(process.env.PORT);
 ```
 
 ---
 
-### 48. **¿Puedes definir un tipo recursivo?**
+### ⚙️ **Procesos, Hilos y Performance**
 
+**26. ¿Qué es el módulo `cluster` en Node.js y para qué se usa?**  
+  
+El módulo `cluster` permite ejecutar múltiples instancias del proceso Node.js que comparten el mismo puerto. Es útil para aprovechar múltiples núcleos de CPU y mejorar el rendimiento de aplicaciones concurrentes.
 
-```ts
-type Json = string | number | boolean | null | Json[] | { [key: string]: Json };
-```
+Ejemplo básico:
+```js
+const cluster = require('cluster');
+const os = require('os');
 
----
-
-### 49. **¿Qué son los `assertion functions`?**
-
-
-Funciones que afirman un tipo en tiempo de ejecución.
-
-```ts
-function assertIsString(val: any): asserts val is string {
-  if (typeof val !== 'string') throw new Error('Not a string');
+if (cluster.isPrimary) {
+  const cpuCount = os.cpus().length;
+  for (let i = 0; i < cpuCount; i++) cluster.fork();
+} else {
+  require('./app'); // Lógica del servidor
 }
 ```
 
 ---
 
-### 50. **¿Cómo tipar una función que acepta callbacks asíncronos y sincrónicos?**
+### 🧪 **Testing**
 
+**27. ¿Cómo harías testing de una API REST en Node.js?**  
 
-```ts
-type SyncOrAsyncCallback<T> = () => T | Promise<T>;
+- Usar Jest o Mocha como framework de testing.
+- Usar Supertest para testear endpoints HTTP.
+- Escribir pruebas para cada caso: éxito, errores de validación, permisos, etc.
 
-function run<T>(cb: SyncOrAsyncCallback<T>): Promise<T> {
-  return Promise.resolve(cb());
-}
+Ejemplo:
+```js
+const request = require('supertest');
+const app = require('./app');
+
+test('GET /api/users debe retornar 200', async () => {
+  const res = await request(app).get('/api/users');
+  expect(res.statusCode).toBe(200);
+});
 ```
+
+---
+
+### 📥 **Subida y Manejo de Archivos**
+
+**28. ¿Cómo manejar la subida de archivos en Node.js con Express?**  
+
+Usando `multer`:
+```js
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('Archivo recibido');
+});
+```
+
+---
+
+### 🌐 **Consumo de APIs**
+
+**29. ¿Cómo consumir APIs externas desde Node.js?**  
+  
+Puedes usar:
+- `fetch` (desde Node.js v18+)
+- `axios` (más completo, con interceptores y timeout)
+- `https` (nativo, pero más bajo nivel)
+
+Ejemplo con axios:
+```js
+const axios = require('axios');
+const response = await axios.get('https://api.example.com/data');
+```
+
+---
+
+### 🧮 **Paginación en APIs**
+
+**30. ¿Cómo implementar paginación en un endpoint?**  
+
+Usar query params `?page=1&limit=10`, calcular `skip`, y limitar los resultados.
+
+Ejemplo con MongoDB:
+```js
+const page = parseInt(req.query.page) || 1;
+const limit = parseInt(req.query.limit) || 10;
+const skip = (page - 1) * limit;
+
+const items = await db.collection('items').find().skip(skip).limit(limit).toArray();
+```
+
+---
+
+### 🛡️ **Validación de Datos**
+
+**31. ¿Cómo validas los datos de entrada en una API?**  
+
+Con librerías como:
+- `joi`
+- `zod`
+- `express-validator`
+
+Ejemplo con `joi`:
+```js
+const Joi = require('joi');
+
+const schema = Joi.object({
+  name: Joi.string().required(),
+  age: Joi.number().min(0)
+});
+
+const { error } = schema.validate(req.body);
+if (error) return res.status(400).send(error.details[0].message);
+```
+
+---
+
+### 🔁 **WebSockets**
+
+**32. ¿Cómo usar WebSockets con Node.js?**  
+
+Puedes usar `ws` o `socket.io`. Ejemplo básico con `ws`:
+```js
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 8080 });
+
+wss.on('connection', socket => {
+  socket.send('Hola cliente!');
+  socket.on('message', message => console.log('Mensaje:', message));
+});
+```
+
+---
+
+### 🗃️ **Bases de Datos**
+
+**33. ¿Cómo te conectas a MongoDB desde Node.js?**  
+
+Usando `mongodb` o `mongoose`:
+```js
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/test');
+```
+
+---
+
+**34. ¿Cómo previenes inyecciones de SQL o NoSQL en Node.js?**  
+
+- En SQL: usando consultas parametrizadas (ej. con `pg` o `mysql2`).
+- En NoSQL (MongoDB): validando los inputs y evitando operadores peligrosos (`$gt`, `$where`).
+- Nunca uses directamente el input del usuario en una consulta sin sanitizar.
+
+---
+
+### 🧱 **Patrones y Arquitectura**
+
+**35. ¿Qué patrón seguirías para escalar una aplicación Node.js?**  
+
+- **Modularización** por funcionalidades.
+- Separar capa de infraestructura (BD, servicios externos), lógica de negocio y controladores.
+- Usar **Inversión de dependencias** para facilitar testeo.
+- Incorporar **Event-driven architecture** para microservicios.
 
 ---
