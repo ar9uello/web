@@ -1,447 +1,405 @@
+---
+
+### 🔹 **Nivel Básico**
+
+#### 1. **¿Qué es React Native?**
+React Native es un framework de código abierto creado por Meta que permite desarrollar aplicaciones móviles usando JavaScript y React. Compila a componentes nativos, lo que permite crear apps para iOS y Android con una base de código compartida.
 
 ---
 
-### 🚀 **Fundamentos de Node.js**
-
-**1. ¿Qué es Node.js y para qué se utiliza?**  
-  
-Node.js es un entorno de ejecución para JavaScript basado en el motor V8 de Chrome. Permite ejecutar código JavaScript del lado del servidor, lo que lo hace ideal para construir aplicaciones web escalables y de alto rendimiento, como APIs REST, servidores web, y más.
+#### 2. **¿Cuál es la diferencia entre React y React Native?**
+- **React** se usa para construir interfaces web.
+- **React Native** se usa para construir interfaces móviles usando componentes nativos (como `View`, `Text`, `ScrollView`) en lugar de HTML.
 
 ---
 
-**2. ¿Qué es el event loop en Node.js?**  
-  
-Es un mecanismo que permite a Node.js realizar operaciones no bloqueantes (como I/O) delegando operaciones pesadas a otros hilos o al sistema, y procesando callbacks cuando las tareas se completan. Gracias al event loop, Node.js puede manejar múltiples operaciones concurrentes de forma eficiente con un solo hilo.
+#### 3. **¿Qué componentes básicos tiene React Native?**
+- `View`: contenedor como un `div` en web.
+- `Text`: para mostrar texto.
+- `Image`: para mostrar imágenes.
+- `ScrollView`: vista desplazable.
+- `TextInput`: entrada de texto.
+- `TouchableOpacity` / `Pressable`: para manejar interacciones táctiles.
 
 ---
 
-**3. ¿Node.js es de un solo hilo?**  
-  
-Sí, el hilo principal que ejecuta JavaScript es único, pero Node.js usa un **thread pool** (a través de libuv) para operaciones I/O intensivas o que requieren múltiples hilos, como operaciones de archivos o criptografía.
-
----
-
-### 📦 **Módulos y Dependencias**
-
-**4. ¿Cuál es la diferencia entre `require` y `import`?**  
-  
-- `require` es parte del sistema de módulos CommonJS (por defecto en Node.js hasta versiones recientes).
-- `import` es parte de los módulos ES6 (ESM).  
-  Para usar `import`, necesitas configurar `"type": "module"` en tu `package.json` o usar la extensión `.mjs`.
-
----
-
-**5. ¿Qué es `package.json` y para qué sirve?**  
-  
-Es un archivo de configuración que contiene información sobre el proyecto, scripts de ejecución, dependencias, versiones, autor, etc. Es fundamental para la gestión de paquetes en proyectos Node.js.
-
----
-
-### 🔧 **Asincronía**
-
-**6. ¿Qué diferencia hay entre callbacks, promesas y async/await?**  
-
-- **Callbacks**: funciones pasadas como argumento que se ejecutan después de una operación.
-- **Promesas**: objetos que representan una operación que puede completarse o fallar.
-- **async/await**: sintaxis más clara sobre promesas, que permite escribir código asincrónico como si fuera síncrono.
-
----
-
-**7. ¿Cómo manejar errores en código async/await?**  
-  
-Usando bloques `try/catch`. Ejemplo:
+#### 4. **¿Cómo funciona el sistema de estilos en React Native?**
+React Native usa un sistema de estilos basado en Flexbox y propiedades similares a CSS, pero no usa clases ni hojas de estilo externas. Todo es en JavaScript con objetos estilo:
 ```js
-async function fetchData() {
-  try {
-    const data = await getData();
-    console.log(data);
-  } catch (err) {
-    console.error('Error:', err.message);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+});
+```
+
+---
+
+### 🔹 **Nivel Intermedio**
+
+#### 5. **¿Cómo se maneja la navegación en React Native?**
+Se usa la librería `react-navigation`. Hay varios tipos de navegadores:
+- `StackNavigator`: navegación tipo pila.
+- `TabNavigator`: navegación por pestañas.
+- `DrawerNavigator`: menú lateral.
+
+```bash
+npm install @react-navigation/native
+```
+
+---
+
+#### 6. **¿Cómo puedes comunicar componentes en React Native?**
+- A través de `props`.
+- Usando **Context API** o **Redux** para estado global.
+- En apps más complejas: `MobX`, `Recoil`, `Zustand`.
+
+---
+
+#### 7. **¿Cómo se integran APIs nativas en React Native?**
+Usando **Native Modules** (en Java/Kotlin o Swift/Objective-C) para exponer funcionalidades del sistema operativo al código JavaScript.
+
+También puedes usar paquetes de la comunidad como `react-native-device-info`, `react-native-geolocation-service`, etc.
+
+---
+
+#### 8. **¿Cómo maneja React Native el rendimiento?**
+- Usa **puente (bridge)** entre JS y el código nativo.
+- Evitar renderizados innecesarios con `React.memo`, `useMemo`, `useCallback`.
+- Para listas grandes, usar `FlatList` en vez de `ScrollView`.
+
+---
+
+### 🔹 **Nivel Avanzado**
+
+#### 9. **¿Qué es el "bridge" en React Native?**
+Es la capa que permite la comunicación entre el código JavaScript y el código nativo (Android/iOS). Cada llamada entre ambos mundos puede ser costosa, por lo que se recomienda minimizar la cantidad de interacciones.
+
+---
+
+#### 10. **¿Qué es JSI (JavaScript Interface) y cómo mejora el rendimiento?**
+JSI es una evolución del bridge tradicional que permite un acceso más directo y rápido a funciones nativas desde JavaScript sin pasar por el puente tradicional. Esto mejora significativamente el rendimiento.
+
+---
+
+#### 11. **¿Qué es Hermes y cuáles son sus beneficios?**
+Hermes es un motor de JavaScript optimizado para React Native. Beneficios:
+- Menor tiempo de arranque (startup).
+- Menor uso de memoria.
+- Mejor rendimiento en dispositivos de gama baja.
+
+---
+
+#### 12. **¿Cómo harías testing en una app de React Native?**
+- **Unit testing**: Jest.
+- **Testing de componentes**: `@testing-library/react-native`.
+- **End-to-end testing**: Detox o Appium.
+
+---
+
+#### 13. **¿Cómo manejarías actualizaciones over-the-air (OTA)?**
+Con herramientas como **CodePush** (de Microsoft App Center) puedes enviar actualizaciones JS sin pasar por App Store/Play Store, aunque con algunas limitaciones.
+
+---
+
+### 🔹 **Arquitectura y Estado**
+
+#### 1. **¿Qué herramientas usarías para manejar el estado global en React Native?**
+- **Context API**: simple y nativa, útil para casos pequeños.
+- **Redux**: robusta, ideal para apps grandes o complejas.
+- **Redux Toolkit**: versión moderna y simplificada de Redux.
+- **Zustand / Recoil / MobX**: alternativas más ligeras y modernas.
+
+---
+
+#### 2. **¿Cuál es la diferencia entre `useEffect` y `useLayoutEffect`?**
+- `useEffect` se ejecuta **después** de que React pinta la pantalla.
+- `useLayoutEffect` se ejecuta **antes** de que se pinte la pantalla, útil para cálculos de layout.
+
+En React Native, `useLayoutEffect` puede bloquear el render inicial, así que se usa con cuidado.
+
+---
+
+#### 3. **¿Cómo manejarías el almacenamiento persistente en una app de React Native?**
+- **`@react-native-async-storage/async-storage`**: almacenamiento clave-valor.
+- **SQLite** o **WatermelonDB**: para datos estructurados.
+- **SecureStore** o **Keychain/Keystore**: para guardar información sensible como tokens.
+
+---
+
+### 🔹 **Rendimiento y Optimización**
+
+#### 4. **¿Cómo optimizarías una lista de elementos en React Native?**
+- Usar **`FlatList`** o **`SectionList`** con `keyExtractor`, `initialNumToRender`, `getItemLayout`.
+- Evitar `ScrollView` con muchos elementos.
+- Usar `React.memo` para evitar renderizados innecesarios de ítems.
+
+---
+
+#### 5. **¿Qué es el re-render y cómo lo evitas?**
+Es cuando un componente vuelve a ejecutarse y renderiza su salida visual. Se evita con:
+- `React.memo`
+- `useCallback` para funciones.
+- `useMemo` para valores calculados.
+- Dividir componentes grandes en componentes pequeños.
+
+---
+
+#### 6. **¿Qué herramientas usarías para perfilar el rendimiento de una app?**
+- **Flipper**: depurador oficial con plugins para logs, performance, Redux, etc.
+- **React DevTools**: para analizar renders.
+- **Hermes** + `console.time`/`console.profile`: para medir tiempos de ejecución.
+
+---
+
+### 🔹 **Integraciones y Librerías Externas**
+
+#### 7. **¿Cómo subirías una imagen a un servidor desde una app React Native?**
+1. Usar `react-native-image-picker` o `expo-image-picker` para obtener la imagen.
+2. Crear un `FormData` y enviarlo con `fetch` o `axios`.
+
+```js
+const formData = new FormData();
+formData.append('photo', {
+  uri: image.uri,
+  name: 'photo.jpg',
+  type: 'image/jpeg',
+});
+
+fetch('https://api.example.com/upload', {
+  method: 'POST',
+  body: formData,
+});
+```
+
+---
+
+#### 8. **¿Qué es Expo y cuáles son sus ventajas/desventajas?**
+**Expo** es una plataforma que facilita el desarrollo con React Native.
+
+Ventajas:
+- Rápida configuración.
+- Acceso a APIs comunes sin código nativo.
+- Fácil testing en dispositivos físicos.
+
+Desventajas:
+- Limitaciones si necesitas código nativo personalizado.
+- Tamaño del bundle algo más grande.
+
+---
+
+### 🔹 **Manejo de Ciclo de Vida y Navegación**
+
+#### 9. **¿Cómo detectar cuándo una pantalla está activa o pierde el foco?**
+Usar el hook `useFocusEffect` o `useIsFocused` de `@react-navigation/native`.
+
+```js
+import { useFocusEffect } from '@react-navigation/native';
+
+useFocusEffect(
+  useCallback(() => {
+    // Pantalla está enfocada
+    return () => {
+      // Pantalla pierde el foco
+    };
+  }, [])
+);
+```
+
+---
+
+#### 10. **¿Qué pasa si colocas un `console.log` dentro de `useEffect` sin dependencias?**
+El `useEffect` se ejecutará una sola vez al montar el componente, similar a `componentDidMount`.
+
+---
+
+### 🔹 **Prácticas y Errores Comunes**
+
+#### 11. **¿Qué errores comunes ves en apps React Native?**
+- No usar `FlatList` para listas grandes.
+- Llamadas de red directamente en componentes sin `useEffect`.
+- No limpiar efectos o subscripciones.
+- No manejar correctamente los permisos del sistema (cámara, ubicación).
+- Mal uso del hook `useEffect` causando renderizados infinitos.
+
+---
+
+#### 12. **¿Cómo estructurarías un proyecto grande de React Native?**
+```bash
+src/
+├── components/
+├── screens/
+├── navigation/
+├── services/
+├── store/
+├── hooks/
+├── utils/
+├── assets/
+```
+
+Se recomienda seguir patrones como **atomic design**, **clean architecture** o **feature-based structure**.
+
+---
+
+### 🔹 **Hooks y Manejo Avanzado de Componentes**
+
+#### 1. **¿Cuál es la diferencia entre `useEffect` y `useFocusEffect` en React Native?**
+
+- `useEffect` es un hook de React que se ejecuta después del render.
+- `useFocusEffect` es específico de React Navigation, y se ejecuta **cada vez que la pantalla gana el foco**, incluso si ya estaba montada.
+
+Ideal para cargar datos o iniciar acciones cada vez que un usuario entra en una pantalla.
+
+---
+
+#### 2. **¿Cómo limpiar un efecto en `useEffect`?**
+```js
+useEffect(() => {
+  const subscription = someService.subscribe();
+
+  return () => {
+    subscription.unsubscribe();
+  };
+}, []);
+```
+El `return` dentro de `useEffect` sirve como función de limpieza cuando el componente se desmonta o cuando cambian las dependencias.
+
+---
+
+#### 3. **¿Cómo previenes memory leaks en React Native?**
+- Limpiando efectos (`useEffect`) correctamente.
+- Cancelando llamadas async o usando `AbortController`.
+- No actualizando el estado después del desmontaje del componente.
+
+```js
+useEffect(() => {
+  let isMounted = true;
+
+  fetchData().then(data => {
+    if (isMounted) setData(data);
+  });
+
+  return () => { isMounted = false };
+}, []);
+```
+
+---
+
+### 🔹 **Acceso a APIs y Conexiones de Red**
+
+#### 4. **¿Cómo manejarías errores de red en React Native?**
+Usando un `try/catch` con `axios` o `fetch`, y manejando los estados de error para mostrar mensajes adecuados al usuario.
+
+```js
+try {
+  const response = await axios.get('https://api.example.com');
+} catch (error) {
+  if (error.response) {
+    // Error de servidor
+  } else {
+    // Error de red o conexión
   }
 }
 ```
 
 ---
 
-### 🌐 **HTTP y APIs**
-
-**8. ¿Cómo crear un servidor HTTP en Node.js sin frameworks?**  
-
+#### 5. **¿Cómo mostrarías un loader mientras se cargan datos de una API?**
 ```js
-const http = require('http');
+const [loading, setLoading] = useState(true);
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hola Mundo');
-});
+useEffect(() => {
+  fetchData().finally(() => setLoading(false));
+}, []);
 
-server.listen(3000, () => {
-  console.log('Servidor en puerto 3000');
-});
+return loading ? <ActivityIndicator /> : <DataComponent />;
 ```
 
 ---
 
-**9. ¿Qué es Express y por qué se usa tanto?**  
+### 🔹 **Componentes Personalizados y Reutilizables**
+
+#### 6. **¿Cómo crearías un botón reutilizable en React Native?**
+```tsx
+const MyButton = ({ title, onPress }) => (
+  <TouchableOpacity style={styles.button} onPress={onPress}>
+    <Text>{title}</Text>
+  </TouchableOpacity>
+);
+```
+
+---
+
+#### 7. **¿Cómo crearías un componente controlado con `TextInput`?**
+```tsx
+const [text, setText] = useState('');
+
+<TextInput
+  value={text}
+  onChangeText={setText}
+/>
+```
+
+---
+
+### 🔹 **Multiplataforma y Dispositivos**
+
+#### 8. **¿Cómo manejarías código específico para iOS y Android?**
+- Usar `Platform.OS`:
+```js
+Platform.OS === 'ios' ? doIOS() : doAndroid();
+```
+- O crear archivos separados:
+```txt
+MyComponent.ios.js
+MyComponent.android.js
+```
+
+---
+
+#### 9. **¿Cómo manejarías diferentes tamaños de pantalla?**
+- Usar `Dimensions` para obtener el ancho y alto del dispositivo.
+- Usar `Flexbox` y estilos responsivos.
+- Librerías útiles: `react-native-responsive-dimensions`, `react-native-size-matters`.
+
+---
+
+### 🔹 **Testeo**
+
+#### 10. **¿Cómo testearías un componente con `@testing-library/react-native`?**
+```tsx
+import { render, fireEvent } from '@testing-library/react-native';
+
+test('debe llamar al callback cuando se presiona el botón', () => {
+  const onPressMock = jest.fn();
+  const { getByText } = render(<MyButton title="Click" onPress={onPressMock} />);
   
-Es un framework minimalista para Node.js que simplifica la creación de APIs y servidores web. Facilita el manejo de rutas, middleware, y respuestas HTTP.
-
----
-
-**10. ¿Qué son middlewares en Express?**  
-  
-Son funciones que tienen acceso al objeto `request`, `response` y a la función `next()`. Se usan para realizar tareas como autenticación, logging, parseo de body, etc.
-
----
-
-### 🛡️ **Seguridad y Buenas Prácticas**
-
-**11. ¿Cómo proteger una API en Node.js?**  
-
-- Autenticación (JWT, OAuth)
-- Validación de entrada (usando Joi, zod, etc.)
-- Rate limiting
-- CORS controlado
-- Uso de HTTPS
-- Helmet para seguridad de cabeceras HTTP
-
----
-
-### 🧪 **Testing y Debugging**
-
-**12. ¿Qué herramientas se usan para testear en Node.js?**  
-
-- Mocha / Jest: frameworks de testing
-- Chai: assertions
-- Supertest: para testear endpoints HTTP
-
----
-
-### ⚙️ **Desempeño y Escalabilidad**
-
-**13. ¿Cómo escalar una aplicación Node.js?**  
-
-- Usar `cluster` o PM2 para balanceo de carga en múltiples procesos
-- Usar cache (ej. Redis)
-- Optimizar consultas a DB
-- Monitoreo (con herramientas como NewRelic, Datadog, etc.)
-
----
-
-**14. ¿Qué es el archivo `.env` y cómo se usa en Node.js?**  
-
-Es un archivo donde se guardan variables de entorno. Con el paquete `dotenv`, puedes cargar estas variables en `process.env`:
-```js
-require('dotenv').config();
-console.log(process.env.PORT);
-```
-
----
-
-### 🧱 **Arquitectura y Estructura de Proyectos**
-
-**15. ¿Cómo organizarías un proyecto grande de Node.js?**  
-
-- **Separación de responsabilidades**: por capas (controllers, services, repositories).
-- **Uso de módulos**: cada funcionalidad puede ser un módulo.
-- **Patrones**: como MVC, Clean Architecture o Hexagonal.
-- **Middlewares reutilizables**, **validaciones centralizadas**, **configuración por entorno**, y **tests por módulo**.
-
----
-
-**16. ¿Qué es un archivo `controller`, `service`, y `repository`?**
-
-- **Controller**: maneja las peticiones HTTP y delega la lógica.
-- **Service**: contiene la lógica del negocio.
-- **Repository**: maneja el acceso a la base de datos o fuentes externas.
-
----
-
-### 📄 **Manejo de Archivos y Streams**
-
-**17. ¿Cómo leer y escribir archivos en Node.js?**  
-
-Usando el módulo `fs`:
-```js
-const fs = require('fs');
-
-// Lectura
-fs.readFile('archivo.txt', 'utf8', (err, data) => {
-  if (err) throw err;
-  console.log(data);
-});
-
-// Escritura
-fs.writeFile('nuevo.txt', 'Contenido', (err) => {
-  if (err) throw err;
+  fireEvent.press(getByText('Click'));
+  expect(onPressMock).toHaveBeenCalled();
 });
 ```
 
 ---
 
-**18. ¿Qué es un stream en Node.js y por qué es útil?**  
+### 🔹 **Internacionalización (i18n)**
 
-Es una abstracción de una fuente de datos que puede ser leída o escrita de manera secuencial. Se usa para manejar datos grandes sin cargarlos todos en memoria, como archivos grandes, video/audio o datos de red.
-
-Ejemplo:
-```js
-const fs = require('fs');
-const readStream = fs.createReadStream('archivo.txt');
-readStream.pipe(process.stdout);
-```
-
----
-
-### 🧠 **Memoria y Rendimiento**
-
-**19. ¿Cómo detectar y solucionar un memory leak en Node.js?**  
-
-- Usar herramientas como **Chrome DevTools**, **clinic.js**, **heap snapshots**, o `--inspect`.
-- Buscar referencias que no se liberan (ej: caches mal manejadas, listeners no removidos).
-- Monitorear el uso de memoria con `process.memoryUsage()`.
-
----
-
-### 🔐 **Autenticación y Seguridad**
-
-**20. ¿Cómo funciona JWT (JSON Web Token)?**  
-
-JWT es un token firmado que contiene información (payload) codificada. Sirve para autenticación sin estado (stateless).  
-Proceso:
-1. El usuario se autentica → el servidor genera un JWT.
-2. El cliente lo guarda y lo envía en cada petición (header `Authorization: Bearer`).
-3. El servidor valida la firma del JWT para autenticar.
-
----
-
-**21. ¿Cómo proteger rutas en Express con JWT?**  
+#### 11. **¿Cómo agregarías soporte multilenguaje a tu app?**
+Con librerías como `i18next` + `react-i18next` o `react-native-localize`.
 
 ```js
-const jwt = require('jsonwebtoken');
-
-function authMiddleware(req, res, next) {
-  const token = req.headers.authorization?.split(' ')[1];
-  if (!token) return res.status(401).send('Token requerido');
-  
-  try {
-    req.user = jwt.verify(token, process.env.JWT_SECRET);
-    next();
-  } catch (err) {
-    res.status(403).send('Token inválido');
-  }
-}
+i18n.t('welcome'); // Traducción según el idioma detectado
 ```
 
 ---
 
-### 🔍 **Logs y Monitoreo**
-
-**22. ¿Cómo manejar logs en una aplicación Node.js?**  
-
-- Usar `console.log` en desarrollo.
-- En producción, usar librerías como **Winston**, **Pino** o **Morgan** (para logging HTTP).
-- Enviar logs a servicios como ELK Stack, Datadog, Loggly o CloudWatch.
-
----
-
-### ⚡ **Frameworks y Librerías Comunes**
-
-**23. ¿Qué ventajas tiene NestJS sobre Express?**  
-
-- Arquitectura basada en módulos.
-- Decoradores y TypeScript por defecto.
-- Inyección de dependencias incorporada.
-- Escalable y mantenible.
-- Más cercano a frameworks como Angular.
-
----
-
-**24. ¿Qué diferencia hay entre `npm` y `yarn`?**  
-
-Ambos son gestores de paquetes, pero:
-- `yarn` fue creado para mejorar el rendimiento de `npm`.
-- Ambos soportan `package-lock.json` / `yarn.lock`.
-- Yarn tiende a ser más rápido en instalaciones paralelas.
-- Hoy en día, las diferencias son mínimas (npm ha mejorado mucho).
-
----
-
-**25. ¿Cómo manejar variables de entorno en Node.js?**  
-
-1. Crear un archivo `.env`:
-```
-PORT=3000
-DB_URL=mongodb://localhost:27017/test
-```
-
-2. Usar `dotenv`:
+#### 12. **¿Cómo detectar el idioma del dispositivo?**
 ```js
-require('dotenv').config();
-console.log(process.env.PORT);
+import * as RNLocalize from 'react-native-localize';
+
+const locales = RNLocalize.getLocales();
+const deviceLanguage = locales[0].languageCode;
 ```
-
----
-
-### ⚙️ **Procesos, Hilos y Performance**
-
-**26. ¿Qué es el módulo `cluster` en Node.js y para qué se usa?**  
-  
-El módulo `cluster` permite ejecutar múltiples instancias del proceso Node.js que comparten el mismo puerto. Es útil para aprovechar múltiples núcleos de CPU y mejorar el rendimiento de aplicaciones concurrentes.
-
-Ejemplo básico:
-```js
-const cluster = require('cluster');
-const os = require('os');
-
-if (cluster.isPrimary) {
-  const cpuCount = os.cpus().length;
-  for (let i = 0; i < cpuCount; i++) cluster.fork();
-} else {
-  require('./app'); // Lógica del servidor
-}
-```
-
----
-
-### 🧪 **Testing**
-
-**27. ¿Cómo harías testing de una API REST en Node.js?**  
-
-- Usar Jest o Mocha como framework de testing.
-- Usar Supertest para testear endpoints HTTP.
-- Escribir pruebas para cada caso: éxito, errores de validación, permisos, etc.
-
-Ejemplo:
-```js
-const request = require('supertest');
-const app = require('./app');
-
-test('GET /api/users debe retornar 200', async () => {
-  const res = await request(app).get('/api/users');
-  expect(res.statusCode).toBe(200);
-});
-```
-
----
-
-### 📥 **Subida y Manejo de Archivos**
-
-**28. ¿Cómo manejar la subida de archivos en Node.js con Express?**  
-
-Usando `multer`:
-```js
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
-
-app.post('/upload', upload.single('file'), (req, res) => {
-  res.send('Archivo recibido');
-});
-```
-
----
-
-### 🌐 **Consumo de APIs**
-
-**29. ¿Cómo consumir APIs externas desde Node.js?**  
-  
-Puedes usar:
-- `fetch` (desde Node.js v18+)
-- `axios` (más completo, con interceptores y timeout)
-- `https` (nativo, pero más bajo nivel)
-
-Ejemplo con axios:
-```js
-const axios = require('axios');
-const response = await axios.get('https://api.example.com/data');
-```
-
----
-
-### 🧮 **Paginación en APIs**
-
-**30. ¿Cómo implementar paginación en un endpoint?**  
-
-Usar query params `?page=1&limit=10`, calcular `skip`, y limitar los resultados.
-
-Ejemplo con MongoDB:
-```js
-const page = parseInt(req.query.page) || 1;
-const limit = parseInt(req.query.limit) || 10;
-const skip = (page - 1) * limit;
-
-const items = await db.collection('items').find().skip(skip).limit(limit).toArray();
-```
-
----
-
-### 🛡️ **Validación de Datos**
-
-**31. ¿Cómo validas los datos de entrada en una API?**  
-
-Con librerías como:
-- `joi`
-- `zod`
-- `express-validator`
-
-Ejemplo con `joi`:
-```js
-const Joi = require('joi');
-
-const schema = Joi.object({
-  name: Joi.string().required(),
-  age: Joi.number().min(0)
-});
-
-const { error } = schema.validate(req.body);
-if (error) return res.status(400).send(error.details[0].message);
-```
-
----
-
-### 🔁 **WebSockets**
-
-**32. ¿Cómo usar WebSockets con Node.js?**  
-
-Puedes usar `ws` o `socket.io`. Ejemplo básico con `ws`:
-```js
-const WebSocket = require('ws');
-const wss = new WebSocket.Server({ port: 8080 });
-
-wss.on('connection', socket => {
-  socket.send('Hola cliente!');
-  socket.on('message', message => console.log('Mensaje:', message));
-});
-```
-
----
-
-### 🗃️ **Bases de Datos**
-
-**33. ¿Cómo te conectas a MongoDB desde Node.js?**  
-
-Usando `mongodb` o `mongoose`:
-```js
-const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/test');
-```
-
----
-
-**34. ¿Cómo previenes inyecciones de SQL o NoSQL en Node.js?**  
-
-- En SQL: usando consultas parametrizadas (ej. con `pg` o `mysql2`).
-- En NoSQL (MongoDB): validando los inputs y evitando operadores peligrosos (`$gt`, `$where`).
-- Nunca uses directamente el input del usuario en una consulta sin sanitizar.
-
----
-
-### 🧱 **Patrones y Arquitectura**
-
-**35. ¿Qué patrón seguirías para escalar una aplicación Node.js?**  
-
-- **Modularización** por funcionalidades.
-- Separar capa de infraestructura (BD, servicios externos), lógica de negocio y controladores.
-- Usar **Inversión de dependencias** para facilitar testeo.
-- Incorporar **Event-driven architecture** para microservicios.
 
 ---
